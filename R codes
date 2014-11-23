@@ -1,0 +1,36 @@
+#makeCacheMatrix creates custom matrix type capable of running four functions together i.e.
+# set stores the matrix in cache, get recalls the matrix. setInverse and getInverse do the same but for the inverse of the original matrix
+
+makeCacheMatrix <- function(x = matrix()) {
+j <- NULL
+set <- function(y){
+x <<- y
+j <<- NULL
+}
+get <- function() x
+setinverse <- function(inverse) j <<- inverse
+getinverse <- function() j
+list(set= set, get = get,
+setinverse = setinverse,
+getinverse = getinverse)
+}
+
+
+# Cachesolve will compute the inverse. If the inverse has already been calculated (and the matrix has not changed),
+#then the cachesolve should retrieve the inverse from the cache. So first it will check whether the value/calculation
+#is done previouly or not, if it is present in cache then it will fetch the value else store it for future use.
+
+cacheSolve <- function(x, ...) {
+
+j <- x$getinverse()
+if (!is.null(j)){
+message("getting cached data")
+return(j)
+}
+data <- x$get()
+j <- solve(data, ...)
+x$setinverse(j)
+j
+
+## Return a matrix that is the inverse of 'x'
+}
